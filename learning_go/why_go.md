@@ -1,13 +1,14 @@
 ## Why Go
 
-### Personal Standpoint
+### Why am I learning Go now? 
 
-* Wanted to learn a programming language to do quick prototypes, understand low level system internals (like networks, system programming, databases)
-* Have been a java programmer for large part of the career. Though I have an inclination on compiled and staticly typed languages, java being centered around object oriented programming and making it excessively verbose and time consuming to accomplanish simple tasks (sample can be simple json parsing).
-* Wanted to learn a language which feels like an interpreted language providing all the code sugars and can help me achive tasks in a simple way.
+* Wanted to learn a programming language to do quick prototypes, understand low level system internals (like networks, web servers, databases)
+* Have been a java programmer for large part of the career. Though I have an inclination on compiled and staticly typed languages, java being is centered around object oriented programming and I increasingly the complexity of language supercedes the problems complexity. 
+* Strictness to adhere to design patterns and excessive verbosity makes it time consuming to accomplanish simple tasks (sample can be simple json parsing).
+* Want to feel a little bit more liberated but still be inclined to the principles of a compiler + staticly typed language.
+* Enter Go, program for 21st century centered around simplicty. In a spectrum of performance to ease of use, go finds the sweet spot.
 
-
-### Technically Why Go?
+### Why Go?
 
 #### Compiled and Interpreted languages
 
