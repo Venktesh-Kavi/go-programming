@@ -5,15 +5,16 @@
 * Wanted to learn a programming language to do quick prototypes, understand low level system internals (like networks, web servers, databases)
 * Have been a java programmer for large part of the career. Though I have an inclination on compiled and staticly typed languages, java being is centered around object oriented programming and I increasingly the complexity of language supercedes the problems complexity. 
 * Strictness to adhere to design patterns and excessive verbosity makes it time consuming to accomplanish simple tasks (sample can be simple json parsing).
-* Want to feel a little bit more liberated but still be inclined to the principles of a compiler + staticly typed language.
-* Enter Go, program for 21st century centered around simplicty. In a spectrum of performance to ease of use, go finds the sweet spot.
+* Want to feel a little bit more liberated but still be inclined to the principles of a compiled + staticly typed language.
+* Enter Go, language for the 21st century centered around simplicty. In a spectrum of performance to ease of use, go finds the sweet spot.
+* Other reasons are has a booming community and the job market for go language looks good at this point in time.
 
 ### Why Go?
 
 #### Compiled and Interpreted languages
 
 * Examples of compiled languages are java, go
-* Intepreted languages (python, ruby)
+* Intepreted languages python, ruby.
 * Most interpreted languages are dynamically types (duck typed).
 
 #### What does compiled mean?
@@ -21,7 +22,7 @@
 * In Java the java compiler (javac) compiles the code to byte code. The JVM and JIT (Just in Time interpreter) interpret the code to machine code (JIT caches most frequently used code to direct machine code)
 * In Go there is no intermediary step of byte code conversion, the compiled code is in machine code. This is were go gains most of its performance.
 
-#### What does interpreted language mean?\
+#### What does interpreted language mean?
 
 * Interpreted languaages are read line by line by the interpreted which is usally written in a low-level language (eg.., python uses CPython as the interpretor, ruby uses MRI (Matz Ruby Interpreter written in C)
 * Intepreted languages tend to be slow as there is an intermediary interpretation layer required.
@@ -29,9 +30,9 @@
 #### Concurrency & Parallelism Handling in Compiled and Interpreted Languages
 
 * Concurrency is the feel of multiple tasks running simaltaneously. (The reason its a feel, is because the CPU context switches depending on the scheduler).
-* Parallelism is diving a task into smaller units and acting on it parallely. (parallelism can be achieved only if have multiple cores).
+* Parallelism is dividing a task into smaller units and acting on it parallely. (parallelism can be achieved only if have multiple cores).
 
-* Large part of the 20 century languages were developed in a time where there only single core processors. Concurrency and distributing tasks were a luxury.
+* Large part of the 20 century languages were developed in a time where there only single core processors. Concurrency and distributing tasks were a points of research.
 * Over the period of time as we entered the 21st century the chip development was more skewed towards increasing the number of cores rather than building a single CPU with a large core (transistors) (This could be due to clock frequencies, thermal desipation and other factors).
 * For most the languages in the 20th century concurrency/parallelism was a after thought.
 * Enter Go (21st century centered around ease of concurrent programming)
