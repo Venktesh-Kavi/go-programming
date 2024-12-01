@@ -129,3 +129,10 @@ puts "Total time: #{(end_time - start_time).round(2)} seconds"
   run N number of processes to utilise the multiple cores in the CPU, but each process is still
   bound to the GIL.
 
+## Distributed Systems
+
+* Multiple open source projects like docker, kubernetes, etcd, prometheus and hashicorps os projects
+  are all built out of GO.
+* This makes Go an ideal programming language with a thriving community to understand os distributed
+  system build outs.
+* Reference: ***Distributed Services in GO (Terry Jeffery)***

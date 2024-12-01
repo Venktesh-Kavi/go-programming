@@ -40,3 +40,13 @@ func Test_SumAll(t *testing.T) {
 		}
 	})
 }
+
+func TestSumTails(t *testing.T) {
+	input := [][]int{{4, 5, 6}, {1, 2, 4}, {6, 8, 9}}
+	expected := []int{11, 6, 17}
+	got := SumTails(input)
+
+	if !reflect.DeepEqual(got, expected) {
+		t.Errorf("got %v want %v", got, expected)
+	}
+}

@@ -17,3 +17,8 @@ func SumAll(nl ...[]int) []int {
 	}
 	return sums
 }
+
+func SumTails(nl ...[][]int) []int {
+
+	return []int{}
+}
