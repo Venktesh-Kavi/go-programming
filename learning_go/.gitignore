@@ -17,8 +17,6 @@
 # Dependency directories (remove the comment below to include it)
 # vendor/
 
-**/*.go
-
 # Go workspace file
 go.work
 go.work.sum
@@ -28,3 +26,11 @@ go.work.sum
 
 # idea files
 .idea
+
+# ignore binaries
+
+# ignore everything in dir and subdirs
+*/*
+
+# All go files in subdirectories, to negate the above cmd
+!*/*.go
