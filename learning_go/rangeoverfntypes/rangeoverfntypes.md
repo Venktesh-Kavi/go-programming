@@ -29,6 +29,7 @@ func Union(E comparable](s1, s2 *Set[E]) *Set[E] {
 * In the above example we want to iterate over the internal maps to get the union of two sets.
 * The map internal type is unexported, making it unavailable for other packages to access them (
   though it is accessible within the set package).
+* Internal go types like slice, map, channels offer range iterators out of the box.
 * The author proposes a couple of ways to solve this:
 
 ### Sol 1: Push Set Elements
@@ -46,3 +47,4 @@ func (s *Set[E]) Push[E](f func(E) bool) {
     } 
 }
 ```
+
