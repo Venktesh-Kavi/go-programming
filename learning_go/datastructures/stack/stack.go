@@ -2,6 +2,7 @@ package stack
 
 import (
 	"errors"
+	"iter"
 )
 
 // Stack implemented using a linked list
@@ -50,6 +51,16 @@ func (s *Stack[T]) Pop() (T, error) {
 func (s *Stack[T]) Clear() {
 	for s.head == nil {
 		s.head = s.head.next
+	}
+}
+
+func (s *Stack[T]) Iter() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for tmp := s.head; tmp != nil; tmp = tmp.next {
+			if !yield(tmp.val) {
+				break
+			}
+		}
 	}
 }
 

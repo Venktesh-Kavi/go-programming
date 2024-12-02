@@ -2,6 +2,7 @@ package stack
 
 import (
 	"errors"
+	"fmt"
 	"math/rand"
 	"testing"
 )
@@ -41,6 +42,14 @@ func Test_stackPopOps(t *testing.T) {
 
 	if err != nil {
 		t.Errorf("error: %v", err)
+	}
+}
+
+func Test_stackIterator(t *testing.T) {
+	ms := setUp()
+
+	for v := range ms.Iter() {
+		fmt.Printf("value: %d\t", v)
 	}
 }
 
