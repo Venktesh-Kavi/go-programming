@@ -158,3 +158,89 @@ func main() {
   fmt.Println(m.Description())
 ```
 
+### Embedding is Not Inheritance
+
+* No other programming languages support embedding.
+* In the above eg.., Manager type cannot be assigned to Employee.
+* If you need to access the employee field perform (m.Employee). var e Employee = m // compilation
+  error
+* Dynamic dispatch is not supported in concrete types in Go.
+    * If you have a method in embedded field, which calls another method in the embedded fields.
+      Assume that the second method called has the same name as the method in the containing type.
+    * The embedded field will not invoke the containing types method.
+
+### The Real Star in Go is its Interface Handling (Btr than Concurrency)
+
+* interfaces in go are usually named with `er` ending. (Eg.., io.Reader, io.Closer, json.Marshaller)
+
+``` go 
+type Stringer interface {
+  String() string
+}
+```
+
+* Go's interfaces are implemented implicitly.
+* Any concrete type which implements the methods sets of an interface, implements the interface
+  implicitly
+* The implicit behaviour bring both type safety and decoupling. Bridging both static and dynamically
+  typed languages.
+
+### Interfaces are Type safe duck typing
+
+* In the dynamically typed programming language world, (ruby, python, js) don't have interfaces.
+* They use duck-typing. If it walks like a duck, quacks like a duck. It is a duck.
+* The concept is you have pass an instance of a type to a method, as long as the function can invoke
+  the method it expects.
+
+``` ruby 
+class Logic:
+
+def process(self, data):
+  # business logic
+
+def program(logic):
+  logic.process(data)
+
+logicToUse = Logic()
+program(logicToUse)
+```
+
+* Duck typing makes it hard to know exactly what functionality is expected. As new developers move
+  to a project or existing dev forgets about the code. They have navigate to understand what the
+  code does.
+
+Java Developers, define an explicit interface and an implementation and refer only to the interface
+in the client code.
+
+``` java
+public interface Logic {
+String process(String data);
+}
+public class LogicImpl implements Logic { public String process(String data) {
+            // business logic
+} }
+public class Client {
+private final Logic logic;
+// this type is the interface, not the implementation
+public Client(Logic logic) { this.logic = logic;
+}
+public void program() {
+// get data from somewhere this.logic(data);
+} }
+public static void main(String[] args) { Logic logic = new LogicImpl(); Client client = new Client(logic); client.program();
+}
+```
+
+* Dynamic language developers look at the explicit interfaces in Java and don’t see how you can
+  possibly refactor your code over time when you have explicit dependencies. Switching to a new
+  implementation from a different provider means rewriting your code to depend on a new interface.
+
+* Go’s developers decided that both groups are right. If your application is going to grow and
+  change
+  over time, you need flexibility to change implementation. However, in order for people to
+  understand
+  what your code is doing (as new people work on the same code over time), you also need to specify
+  what the code depends on. That’s where implicit interfaces come in. Go code is a blend of the
+  previous two styles:
+
+
