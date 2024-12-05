@@ -7,7 +7,45 @@ import (
 	"testing"
 )
 
+func setup(size, rlimit int) *Stack[int] {
+	s := New[int]()
+	for range size {
+		s.Push(rand.Intn(rlimit))
+	}
+	return s
+}
+
 func Test_stackCreation(t *testing.T) {
+	data := []struct {
+		name     string
+		expected *Node[int]
+		stack    *Stack[int]
+	}{
+		{
+			name:     "empty stack creation",
+			expected: nil,
+			stack:    New[int](),
+		},
+		{
+			name:     "create stack with multiple elements",
+			expected: &Node[int]{val: 20, next: &Node[int]{val: 10}},
+			stack: func() *Stack[int] {
+				ms := New[int]()
+				ms.Push(10)
+				ms.Push(20)
+				return ms
+			}(),
+		},
+		{},
+	}
+
+	for _, dt := range data {
+		t.Run(dt.name, func(t *testing.T) {
+			if dt.stack.head != dt.expected {
+
+			}
+		})
+	}
 	s := New[int]()
 	got := s.head
 
@@ -50,6 +88,23 @@ func Test_stackIterator(t *testing.T) {
 
 	for v := range ms.Iter() {
 		fmt.Printf("value: %d\t", v)
+	}
+
+	// breaking or returning false to stop iteration
+	iterator := ms.Iter()
+
+	iterator(func(value int) bool {
+		if value > 10 {
+			return false
+		}
+		return true
+	})
+
+	// use with for-range
+	for v := range ms.Iter() {
+		if v == 20 {
+			break // we might not be able to yield a func with false, use break to quite execution.
+		}
 	}
 }
 
@@ -94,11 +149,6 @@ func Test_stackLen(t *testing.T) {
 
 func setUp() *Stack[int] {
 	s := New[int]()
-	const sl = 10
-	const rn = 20
-	for range sl {
-		s.Push(rand.Intn(rn))
-	}
 	return s
 }
 
