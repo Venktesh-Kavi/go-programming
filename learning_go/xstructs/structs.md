@@ -243,4 +243,62 @@ public static void main(String[] args) { Logic logic = new LogicImpl(); Client c
   what the code depends on. That’s where implicit interfaces come in. Go code is a blend of the
   previous two styles:
 
+``` go
+type Logic interface {
+  Process(data string) string
+}
 
+type LogicProvider struct {}
+
+func (l LogicProvider) Process(data string) string {
+  // business logic
+}
+
+type client struct {
+  L Logic
+}
+
+func (c Client) Program() {
+  c.L.Process(data)
+}
+
+func main() {
+  c := Client {
+      L: LogicProvider{},
+    }
+  c.Program()  
+}
+```
+
+### Using Standard Interfaces Encourage Decorator Pattern
+
+``` go
+func Process(r io.Reader) error {}
+
+f, err := os.Open("foo.txt") // os.File returned implementes io.Reader interfaces Read Method
+if err != nil {
+  return err
+}
+defer f.Close()
+return process(f) // os.File type is sent in place of io.Reader
+return nil
+
+f, err := os.Open("foo.zip")
+if err != nil {
+  return err
+}
+defer f.Close()
+gz, err := gzip.NewReader(f) // io.File type being passed inplace of io.Reader.
+if err != nil {
+  return err
+}
+defer gz.Close()
+return process(gz)
+
+// same code that was reading from a uncompressed file is reading from a compressed file.
+```
+
+* Decorator pattern is typically used to add supplementary functionalities to exposed
+  interface/functions from libraries.
+* It is common in Go to write factory functions, which takes in an instance of an interface &
+  returns another type that implements the interface.

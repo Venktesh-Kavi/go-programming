@@ -37,4 +37,26 @@ type Test struct {
 * Yield statement allows to return the execution context to the caller.
 * Typically used for function that return an iterable context in go
 * References:
-    * [Ref](https://bbengfort.github.io/2016/12/yielding-functions-for-iteration-golang/) 
+    * [Ref](https://bbengfort.github.io/2016/12/yielding-functions-for-iteration-golang/)
+
+### Go Http Package
+
+* Interfaces with these single methods are very powerful in go, examples are io.Reader, io.Writer,
+  http.Handler.
+* Any type which implements the ServeHttp method follows the Handler interface.
+* Typically, when we want to do this we might create a struct and create a method to comply with the
+  interface.
+* Here we are using function type which represents the same contract as the ServeHttp method.
+* So the http.HandlerFunc(pattern, fn func(ResponseWriter, *Request)) can essential be used instead
+  of using http.Handler(pattern, Handler)
+
+``` go
+type Handler interface {
+  ServeHttp(ResponseWriter, *Request)
+}
+
+type HandlerFunc func(ResponseWriter, *Request)
+
+func (h HandlerFunc) ServeHttp(w ResponseWriter, r *Request) {
+}
+```
