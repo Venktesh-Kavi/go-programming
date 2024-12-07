@@ -329,3 +329,4 @@ func (f HandlerFunc) ServerHttp(w http.ResponseWriter, r *http.Request) {
 * In the http packages, Handler is just an entry point for a chain of calls that needs to be
   configured. However, if it's a simple function (like slice.Sort) then a parameter of function type
   is a good choice.
+* [Function as Bridge Types Explained](https://medium.com/@Sushil_Kumar/function-types-as-bridge-to-interfaces-bad0f2d5e1f4)
