@@ -2,6 +2,7 @@ package tstructs
 
 import (
 	"fmt"
+	"slices"
 	"time"
 )
 
@@ -18,6 +19,7 @@ func DoUpdateWrong(c Counter) {
 }
 
 func DoUpdateRight(c *Counter) {
+	slices.Sort()
 	c.Increment()
 }
 
