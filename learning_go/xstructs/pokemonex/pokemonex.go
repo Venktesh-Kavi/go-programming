@@ -16,6 +16,13 @@ type Pokemon struct {
 	power int
 }
 
+func (u1 User) Equals(u2 User) bool {
+	// name equality
+	if u1.name != u2.name {
+		return false
+	}
+}
+
 // Attack user(1) launches an attack on user(2).
 func Attack(u1, u2 User) int {
 	var i int
@@ -31,7 +38,6 @@ func Attack(u1, u2 User) int {
 
 // PokeCompare compares whether two users have the same pokemons
 func PokeCompare(u1, u2 User) bool {
-	return false
 }
 
 func DealPokemonCards(...User) {

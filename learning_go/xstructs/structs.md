@@ -302,3 +302,30 @@ return process(gz)
   interface/functions from libraries.
 * It is common in Go to write factory functions, which takes in an instance of an interface &
   returns another type that implements the interface.
+
+### Functions as a bridge to interfaces
+
+* Methods can be declared for any user defined type, including user-defined function types.
+* ***They allow functions to implement interfaces.***
+
+``` go
+// http handler example
+type Handler interface {
+  ServeHttp(http.ResponseWriter, *http.Request)
+}
+
+type HandlerFunc func(http.ResponseWriter, *http.Request)
+
+func (f HandlerFunc) ServerHttp(w http.ResponseWriter, r *http.Request) {
+  f(w, r)
+}
+```
+
+* Go encourages small interfaces and an interface of one method could easily replace a parameter of
+  function type. When to use input parameter as function type or an interface.
+* If your single function depends on many other functions or other state that's not specified in the
+  parameters, then use an interface parameter and use a function type to bridge the function to the
+  interface.
+* In the http packages, Handler is just an entry point for a chain of calls that needs to be
+  configured. However, if it's a simple function (like slice.Sort) then a parameter of function type
+  is a good choice.
