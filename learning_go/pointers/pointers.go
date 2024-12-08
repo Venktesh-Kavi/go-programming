@@ -9,7 +9,6 @@ func main() {
 	spr := &t // creates a pointer reference to the slice descriptor
 	fmt.Printf("spr points to: %p (slice descriptor)\n", spr)
 	fmt.Printf("slice descriptor points to: %p (backing array)\n", t)
-
 	// Example of using New
 	f := new(Foo) // allocates memory for type foo with zero values of the internal types.
 	fmt.Printf("foo values: %v\n", f)
