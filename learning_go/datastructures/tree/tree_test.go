@@ -2,7 +2,6 @@ package tree
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 )
 
@@ -41,12 +40,30 @@ func TestClearTree(t *testing.T) {
 	rn1 := root.InsertRight(30)
 	rn1.InsertRight(40)
 
-	fmt.Printf("root pointer: %v\n", reflect.TypeOf(root).Kind())
+	//fmt.Printf("address of root: %p\n", &root)
 	root.Clear() // implicitly pointer of root is passed
 
 	got := root.Height()
-	var expected int
+	var expected *Node[int]
+	expected = &Node[int]{
+		Value: 0,
+		Left:  nil,
+		Right: nil,
+	}
+	if *root != *expected {
+		t.Fatalf("got %v, expected: %v", root, expected)
+	}
+	if got != 1 {
+		t.Fatalf("default height of tree is 1 because of zero value, got: %d, expected: %d\n", got, 1)
+	}
+}
+
+func TestNilPointerTree(t *testing.T) {
+	var enode *Node[int] // this pointer points to nil
+
+	got := enode.Height()
+	expected := 0
 	if got != expected {
-		t.Fatalf("got %d, expected %d\n", got, expected)
+		t.Fatalf("got %d, expected %d", got, expected)
 	}
 }

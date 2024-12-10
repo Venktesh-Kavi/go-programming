@@ -48,9 +48,22 @@ func (n *Node[T]) Height() int {
 	return 1 + int(res)
 }
 
+// Clear method receiver receives a copy of the pointer. performing n = nil, only affects the local copy.
 func (n *Node[T]) Clear() {
 	if n == nil {
 		return
 	}
-	n = nil
+
+	//fmt.Printf("address of receiver: %p\n", &n)
+	if n.Left != nil {
+		n.Left.Clear()
+		n.Left = nil
+	}
+
+	if n.Right != nil {
+		n.Right.Clear()
+		n.Right = nil
+	}
+	var zero T
+	n.Value = zero
 }

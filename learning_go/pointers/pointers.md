@@ -141,3 +141,5 @@ We pass on the populated contents of the buffer for processing.
 
 * The above pattern in go is a very efficient and idiomatic way to write go code with efficient
   memory utilisation.
+
+Using fmt.Printf("%p", somePtr). %p prints the value itself (what it is pointing to). To get address of pointer use &somePtr
