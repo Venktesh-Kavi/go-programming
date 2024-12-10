@@ -14,6 +14,7 @@ This isn't particularly useful, users should be able to pass in anything which i
 Greet accepts a writer interface.
 Creates a unix pipe between a writer and reader file descriptor.
 https://pubs.opengroup.org/onlinepubs/9699919799/functions/pipe.html
+https://en.wikipedia.org/wiki/Pipeline_(Unix)
 */
 func TestGreet(t *testing.T) {
 	oldStdout := os.Stdout
