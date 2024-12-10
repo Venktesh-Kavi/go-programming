@@ -2,6 +2,7 @@ package dependency_injection
 
 import (
 	"bytes"
+	"reflect"
 	"testing"
 )
 
@@ -17,4 +18,54 @@ func TestGreetOutput(t *testing.T) {
 	if got != expected {
 		t.Fatalf("got %s, expected %s", got, expected)
 	}
+}
+
+const sleep = "sleep"
+const write = "write"
+
+type SpySleeper struct {
+	Calls []string
+}
+
+func (s *SpySleeper) Sleep() {
+	s.Calls = append(s.Calls, sleep)
+}
+
+func (s *SpySleeper) Write() {
+	s.Calls = append(s.Calls, write)
+}
+
+func TestCounter(t *testing.T) {
+	buf := new(bytes.Buffer)
+	t.Run("print from 3 to Go!", func(t *testing.T) {
+		ss := &SpySleeper{}
+		Counter(buf, ss)
+		got := buf.String()
+		expected := `3
+2
+1
+Go!
+`
+		if got != expected {
+			t.Fatalf("got %s, expected %s", got, expected)
+		}
+	})
+
+	t.Run("write sleep testing test", func(t *testing.T) {
+		ss := &SpySleeper{}
+		Counter(buf, ss)
+		expected := []string{
+			"write",
+			"sleep",
+			"write",
+			"sleep",
+			"write",
+			"sleep",
+		}
+
+		if reflect.DeepEqual(ss.Calls, expected) {
+			t.Fatalf("got: %s, expected: %s", ss.Calls,
+				expected)
+		}
+	})
 }
