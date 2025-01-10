@@ -35,7 +35,10 @@ func main() {
 	// composing iterators
 	PrintAll(ItemIterator(items))
 
-	slices.All()
+	// slices and maps now uses iterators, slices.All, slices.Values
+	for _, item := range slices.All(items) {
+		fmt.Println("Slice Iterator: ", item)
+	}
 }
 
 func PrintAll[V any](seq iter.Seq[V]) {
