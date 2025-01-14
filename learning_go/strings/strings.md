@@ -28,3 +28,54 @@ ns += "k" // ns now starts pointing to a new backing array "bark"
 fmt.Println(s) // s still points to bar (backing array)
 fmt.Println(ns) // ns is bark now
 ```
+
+Slices of Strings
+
+s := "Hello World!"
+
+s[1:] => ello World
+s[:1] => H
+
+Strings are **Immutable** in Go. Reason
+    - Thread Safety: strings can be shared between two go routines without any explicit locking.
+    - Simplified logic: No need to worry about content changes in a string affecting other references.
+    - Efficiency: Allocating new strings is added cost, go efficient memory allocator minimizes this cost.
+
+If we want to just manipulate a string prefer bytes. 
+
+``` go
+
+s := "hello"
+s1 := "world"
+
+bytes := []byte(s)
+
+// replace all l's to !.
+
+for i, b := range bytes {
+    if b == 'l' {
+        bytes[i] = '!'
+    }
+}
+
+return string(bytes)
+
+```
+
+If the given string has unicode characters use runes. As using bytes might split apart a multi byte character like a smiley.
+
+### General Rule of Thumb:
+
+#### Performance-Sensitive Code:
+
+Converting a string to []rune incurs a cost because it involves decoding UTF-8 into Unicode code points.
+For plain ASCII strings or situations where you only need byte-level operations, avoid []rune.
+
+#### When Working with ASCII-Only Strings:
+
+If the string is guaranteed to contain only single-byte ASCII characters, there’s no need to use []rune. Byte-level operations are sufficient and faster.
+
+#### When You Don’t Need Character-Level Precision:
+
+For tasks like finding substrings, comparing strings, or simple slicing in ASCII strings, stick to direct string operations.
+
