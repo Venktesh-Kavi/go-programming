@@ -12,3 +12,10 @@ func OpenDB(user, password, addr, db string, open sqlOpener) (*sql.DB, error) {
 	conn := fmt.Sprintf("%s:%s@%s/%s", user, password, addr, db)
 	return open("mysql", conn)
 }
+
+var MkySqlOpener = sql.Open
+
+func OpenDBMonkeyPatch(user, password, addr, db string) (*sql.DB, error) {
+	conn := fmt.Sprintf("%s:%s@%s/%s", user, password, addr, db)
+	return MkySqlOpener("mysql", conn)
+}

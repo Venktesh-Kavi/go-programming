@@ -51,4 +51,15 @@ func TestOpenDB(t *testing.T) {
 			}
 		})
 	}
+
+	// Monkey Patch
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			MkySqlOpener = tt.open
+			_, err := OpenDB(tt.user, tt.password, tt.addr, tt.db, MkySqlOpener)
+			if !errors.Is(err, tt.expectedErr) {
+				t.Errorf("OpenDB() error = %v, wantErr %v\n", err, tt.expectedErr)
+			}
+		})
+	}
 }
