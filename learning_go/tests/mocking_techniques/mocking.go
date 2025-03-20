@@ -24,7 +24,7 @@ func OpenDBMonkeyPatch(user, password, addr, db string) (*sql.DB, error) {
 	return MkySqlOpener("mysql", conn)
 }
 
-// Mocking using interfaces, typical file reading use case.
+// MOCKING Using Interfaces, typical file reading use case.
 
 func FileNotReadToCapError(msg string) error {
 	return errors.New(msg)
@@ -61,3 +61,5 @@ func ReadContents(r io.ReadCloser, numOfByte int) (bytes []byte, error error) {
 	}
 	return data, nil
 }
+
+// Embedding Interfaces
