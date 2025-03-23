@@ -1,94 +1,138 @@
-## Notes on Slices in Go
+# Notes on Slices in Go
 
-* A slice is an array with dynamic capacity, it is different from an array in go which has a fixed
-  size.
-* A slice typically accepts a length and a capacity.
+- A slice in Go is a dynamically resizable array, unlike an array which has a fixed size.
+- Typically, a slice accepts a length and a capacity.
 
 ## Dynamic Resizing in Go Internals
 
-* Slice is a dynamically resizable array. An array is of fixed size and is used to store data of a prescribed type.
-* Internally an array is a sequence of pointers. The pointer allocation pattern depends on the size of the data type.
-* The allocation also depends on whether it can be stored in stack or in the heap which the go runtime decides basis the
-  capacity rules.
+- A slice is a dynamically resizable array, while an array is of fixed size and used to store data of a prescribed type.
+- Internally, an array is a sequence of pointers. The pointer allocation pattern depends on the size of the data type.
+- The allocation decision (whether to store in the stack or heap) is determined by the Go runtime based on capacity rules.
+- A slice is represented as a `SliceHeader`, which is a descriptor pointing to the backing array.
 
-Slice is represented as a SliceHeader which is pointer descriptor(variable) to the backing the array.
-
-``` go
+```go
 type SliceHeader struct {
-  data    unsafe.Pointer
-  cap     int
-  len     int
+  data unsafe.Pointer
+  cap  int
+  len  int
 }
 ```
 
-To understand this we need to know what is unsafe.Pointer?
+## Understanding `unsafe.Pointer`
 
-Properties of a Pointer different from other types
+### Properties of a Pointer
 
-- A pointer value of any type can be converted to a pointer (Example: a := 10, b := &a, c := unsafe.Pointer(b))
-- Pointer can be converted to a pointer value of any type.
-- A uintptr can be converted to a Pointer
-- A pointer can be converted to a uintptr
+- A pointer value of any type can be converted to another pointer type.
+  - Example:
 
-***Pointers allow to defeat the type system and read and write arbitrary memory***
+    ```go
+    a := 10
+    b := &a
+    c := unsafe.Pointer(b)
+    ```
 
-Following patterns are valid, other patterns can be lead to unreliable or invalid results now or in the future.
+- A `uintptr` can be converted to a `Pointer`.
+- A `Pointer` can be converted to a `uintptr`.
+- Pointers allow bypassing the type system to read and write arbitrary memory.
 
-## Conversion from *T1 to *T2
+**Note**: Following valid patterns can help avoid unreliable or invalid results now or in the future.
 
-``` go
-math.Float64bits
+### Common Pointer Conversion Pattern
 
+#### Conversion from T1 to T2
+
+Example `math.Float64bits`:
+
+```go
 func Float64bits(f float64) uint64 {
-  return *(*uint64(unsafe.Pointer(&f)))
+  return *(*uint64)(unsafe.Pointer(&f))
 }
 ```
 
-## Conversion of pointer to uintptr & not vice-versa
+#### Conversion of Pointer to uintptr & Not Vice-Versa
 
-***uintptr***
+##### `uintptr`
 
-- Conversion of pointer to uintptr is usually used to get the memory address of value pointer at in integer format.
-- It is usually used for printing.
-- uintptr is just an integer not a reference. Even if the Pointer holds some reference to an object, converting to
-  uintptr means uintptr is just an integer and does not point to any reference.
-- It does not track the object being relocated in memory nor does it stop the gc from collecting the object.
-- uintptr cannot be stored in a variable. (u := uintptr(p) //INVALID) before it converted to a pointer. (p =
-  unsafe.Pointer(u + offset))
+- Conversion of a pointer to a `uintptr` is often used to get the memory address of the value pointed to in an integer format.
+- Typically used for printing.
+- `uintptr` is just an integer, not a reference. It does not track object relocation nor prevent garbage collection.
+- `uintptr` cannot be directly assigned to a variable before being converted back to a pointer.
 
-### Conversion of Pointer to uintptr and back, with arithmetic
+Example of converting pointer to `uintptr` and back, with arithmetic:
 
-- if p points to an allocated object, it can be advanced through the object by converting it into uintptr, addition of
-  an offset and conversion back to Pointer.
-
-``` go
+```go
 p = unsafe.Pointer(uintptr(p) + offset)
 ```
 
-- It is also valid to round pointers using &^.
+- Rounding pointers using `&^` is also valid.
 
-### Common pattern is to access fields of a struct or elements of an array
+##### Accessing Fields of a Struct or Elements of an Array
 
+Example patterns:
+
+```go
 f := unsafe.Pointer(&s.f)
-f := unsafe.Pointer(uintptr(&s) + unsafe.Offsetof(&s.f)) // equivalent of 1
-
+f := unsafe.Pointer(uintptr(&s) + unsafe.Offsetof(s.f)) // equivalent to the above
 e := unsafe.Pointer(&x[i])
-e := unsafe.Pointer(uintptr(unsafe.Pointer(&x[0])) + i*unsafe.Sizeof(x[0])) // get the data type size multiple by i to
-move offset.
+e := unsafe.Pointer(uintptr(unsafe.Pointer(&x[0])) + i*unsafe.Sizeof(x[0])) // get data type size, multiplied by i to move offset
+```
 
 ## Usage in SysCalls
 
-- A SysCall function call passes the uintptr directly to the operating system and lets it manipulate it to a pointer
-  depending on the calling function.
-- `syscall.SysCall(SYS_READ, uintptr(fd), uintptr(unsafe.Pointer(p)), uintptr(n))`
-- The compiler handles a Pointer converted to a uintptr in the argument list of
-  a call to a function implemented in assembly by arranging that the referenced
-  allocated object, if any, is retained and not moved until the call completes,
-  even though from the types alone it would appear that the object is no longer
-  needed during the call.
+- A syscall function call passes the `uintptr` directly to the operating system and lets it manipulate it to a pointer depending on the calling function.
+- Example:
 
-``` go
-u := uintptr(unsafe.Pointer(p)) // INVALID. uintptr cannot be assigned to a variable
-syscall.SysCall(SYS_READ, uintptr(fd), u, uintptr(n))
+  ```go
+  syscall.Syscall(SYS_READ, uintptr(fd), uintptr(unsafe.Pointer(p)), uintptr(n))
+  ```
+
+- The compiler ensures that a pointer converted to a `uintptr` in an argument list of a call to an assembly function is retained and not moved until the call completes.
+
+## Removing an Element from a Slice
+
+- Given an index, there are two ways to remove an element from a slice:
+
+```go
+// RemoveElement
+func RemoveElement(nums []int, idx int) []int {
+    nums = append(nums[:idx], nums[idx+1:]...)
+    return nums
+}
+
+func RemoveEleByShifting(nums []int, idx int) []int {
+    copy(nums[idx:], nums[idx+1:])
+    return nums[:len(nums)-1]
+}
 ```
 
+- In the first approach `append` can possibly create new slice header with a new len. Though the backing array is the
+  same. The returned slice can be a new view of the same backing array.
+
+```go
+aux := []int{1, 2, 3, 4, 5}
+nAux := append(aux[:idx], aux[idx+1:]...)
+// nAux and aux will be different slice descriptors.
+fmt.Println(&aux, &nAux)
+```
+
+Correct Approaches for Removing Element
+
+Ref: https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
+- Use the slices.Delete method stable available from go 1.21
+- Or do not touch the initial slice at all. Example
+ 
+```go
+func RemoveElement(nums []int, idx int) []int {
+	nn := make([]int, len(nums) - 1)
+	i, k := 0
+    for i<len(nn) {
+        if i != idx {
+            nn[k] = nums[i]
+            k++
+        } else {
+			k++
+        }
+        i++
+    }
+}
+```

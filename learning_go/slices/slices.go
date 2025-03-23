@@ -37,3 +37,36 @@ func SearchASlice(slice []int) error {
 	fmt.Println("Found value: ", fv)
 	return nil
 }
+
+func RemoveElement(nums []int, idx int) error {
+	if !(idx < len(nums)) {
+		return fmt.Errorf("index out of range")
+	}
+
+	// removing the element, approach 1
+	// In the below approach it results in creation of new slice and attaching it to nums. Also the length is modified.
+	nums = append(nums[:idx], nums[idx+1:]...)
+	return nil
+}
+
+func RemoveElementWithoutModification(nums []int, idx int) []int {
+	new_arr := make([]int, (len(nums) - 1))
+	k := 0
+	for i := 0; i < (len(nums) - 1); {
+		if i != idx {
+			new_arr[i] = nums[k]
+			k++
+		} else {
+			k++
+		}
+		i++
+	}
+
+	return new_arr
+}
+
+func RemoveElementWithoutMod(nums []int, idx int) []int {
+	ret := make([]int, 0)
+	ret = append(ret, nums[:idx]...)
+	return append(ret, nums[idx+1:]...)
+}
