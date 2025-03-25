@@ -92,3 +92,10 @@ func timeHandler(format string) http.HandlerFunc {
     }
 }
 ```
+
+
+
+References
+
+1. Handler & ServerMutexes: https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go
+2. Handling Json in Request Body: https://www.alexedwards.net/blog/how-to-properly-parse-a-json-request-body 
