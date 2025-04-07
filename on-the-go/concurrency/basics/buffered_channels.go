@@ -6,7 +6,7 @@ import (
 )
 
 /*
-Unbuffered channels contain an internal value queue with fixed capacity. They don't block on sending/receiver till the cap is reached.
+Buffered channels contain an internal value queue with fixed capacity. They don't block on sending/receiver till the cap is reached.
 */
 func main() {
 	ch := make(chan int, 10)
@@ -20,6 +20,6 @@ func main() {
 	}()
 
 	for val := range ch {
-		fmt.Printf("received: %d\n", val)
+		fmt.Printf("received: %8d\n", val)
 	}
 }
