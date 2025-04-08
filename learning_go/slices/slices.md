@@ -23,6 +23,7 @@ type SliceHeader struct {
 ### Properties of a Pointer
 
 - A pointer value of any type can be converted to another pointer type.
+
   - Example:
 
     ```go
@@ -118,9 +119,36 @@ fmt.Println(&aux, &nAux)
 Correct Approaches for Removing Element
 
 Ref: https://stackoverflow.com/questions/37334119/how-to-delete-an-element-from-a-slice-in-golang
+
 - Use the slices.Delete method stable available from go 1.21
 - Or do not touch the initial slice at all. Example
- 
+
+Using delete
+
+```go
+func main() {
+	s := []int{2, 3, 4, 5}
+	ns := slices.Delete(s, 3, len(s))
+	fmt.Println(ns)
+}
+```
+
+```go
+func removeElement(nums []int, idx int) []int {
+  nn := make([]int, len(nums) - 1)
+  copy(nn[:idx], nums[:idx])
+  copy(nn[idx:], nums[idx+1:])
+  return nn
+}
+```
+
+```go
+func removeElement(nums []int, idx int) []int {
+  copy(nums[:idx], nums[idx+1:])
+  return nums[:len(nums)-1]
+}
+```
+
 ```go
 func RemoveElement(nums []int, idx int) []int {
 	nn := make([]int, len(nums) - 1)
